@@ -32,7 +32,7 @@ class GameState
                 'date' => $puzzle->date->toDateString(),
                 // Browsers cache the image, so the URL changes with the puzzle (and again if its
                 // street is swapped), or they'd keep showing the old street.
-                'image_url' => url("/api/puzzles/{$puzzle->puzzle_number}/image?v={$puzzle->updated_at->timestamp}"),
+                'image_url' => "/api/puzzles/{$puzzle->puzzle_number}/image?v={$puzzle->updated_at->timestamp}", // relative: no http/https mix-ups behind the host's proxy
             ],
             'max_guesses' => Scorer::MAX_GUESSES,
             'total_streets' => count($this->streets->all()),

@@ -54,3 +54,7 @@ Tunables live in `config/streetle.php`. Environment settings:
 ## Data credits
 
 Street data © OpenStreetMap contributors (ODbL). Ward boundaries and postcodes from the Office for National Statistics via postcodes.io; contains OS data © Crown copyright and database right (Open Government Licence). Imagery © Google.
+
+## Deploying
+
+See [DEPLOY.md](DEPLOY.md): Hostinger shared hosting, pulled from GitHub over SSH, with the frontend built locally and uploaded by `./deploy.ps1`.

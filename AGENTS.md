@@ -12,6 +12,7 @@ Daily "-dle" game: guess a Salford street from a static Street View image. Full 
 - Dev: `php artisan serve` plus `npm run dev` (React + Vite in `resources/js`, served by the one Blade shell `resources/views/app.blade.php`). `npm run build` for production assets.
 - Tests: `php vendor/bin/phpunit` (backend) and `npm test` (Vitest, frontend). Type-check with `npx tsc -p .`.
 - Street data pipeline, in order: `streets:import`, `streets:assign-areas`, `streets:assign-postcodes`, `streets:check-coverage`, then `streets:export` to refresh the committed `database/data/streets.json` (loaded by `php artisan db:seed`). Each is resumable and caches downloads in `storage/app/private/streetle/`. Tunables are in `config/streetle.php`.
+- Deploying: see DEPLOY.md (`./deploy.ps1`). Production is Hostinger shared hosting with MySQL and no Node, so frontend assets are built locally and uploaded.
 - Each `/api/puzzles/{number}/image` hit is a billable Street View request, so don't hammer it while testing.
 
 ## Conventions
