@@ -22,7 +22,7 @@ Host salfordle
 ```sh
 ssh salfordle
 ssh-keygen -t ed25519 -C "salfordle deploy" -f ~/.ssh/salfordle_deploy -N ""
-cat ~/.ssh/salfordle_deploy.pub     # add this on GitHub: repo → Settings → Deploy keys (read-only)
+cat ~/.ssh/salfordle_deploy.pub     # add at github.com/jackmachin/salfordle/settings/keys (read-only)
 cat >> ~/.ssh/config <<'EOF'
 Host github-salfordle
     HostName github.com
@@ -35,7 +35,7 @@ EOF
 
 ```sh
 cd ~/domains/salfordle.co.uk
-git clone git@github-salfordle:<github user>/salfordle.git app
+git clone git@github-salfordle:jackmachin/salfordle.git app
 cd app
 php -v                              # must be 8.3+; if not, use Hostinger's full path, e.g. /opt/alt/php84/usr/bin/php
 composer install --no-dev --optimize-autoloader --no-interaction
