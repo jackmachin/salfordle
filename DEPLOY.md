@@ -1,53 +1,29 @@
 # Deploying Salfordle (Hostinger shared hosting)
 
-The setup: code is pulled from GitHub over SSH, the domain's web folder is a symlink to Laravel's `public/`, production runs MySQL, and the frontend is built locally and uploaded (shared hosting has no Node).
+The setup: code is pulled from the public GitHub repo, the domain's web folder is a symlink to Laravel's `public/`, production runs MySQL, and the frontend is built locally and uploaded (shared hosting has no Node).
 
-Hostinger's SSH usually listens on port **65002**. The details (user, host, port) are in hPanel under **Advanced → SSH Access**. Paths below assume Hostinger's usual layout, `~/domains/salfordle.co.uk/`. Adjust if yours differs.
+Salfordle shares a Hostinger account with other sites, reached over SSH as `limefinder-server` (defined in your `~/.ssh/config`: port 65002). Only ever touch `~/domains/salfordle.co.uk/` on it.
 
 ## One-off setup
 
-### 1. SSH alias (on your PC)
-
-Add to `C:\Users\<you>\.ssh\config`, so every command below can just say `salfordle`:
-
-```
-Host salfordle
-    HostName <server IP or hostname from hPanel>
-    Port 65002
-    User <ssh user from hPanel>
-```
-
-### 2. Deploy key (on the server)
+### 1. Code (on the server)
 
 ```sh
-ssh salfordle
-ssh-keygen -t ed25519 -C "salfordle deploy" -f ~/.ssh/salfordle_deploy -N ""
-cat ~/.ssh/salfordle_deploy.pub     # add at github.com/jackmachin/salfordle/settings/keys (read-only)
-cat >> ~/.ssh/config <<'EOF'
-Host github-salfordle
-    HostName github.com
-    IdentityFile ~/.ssh/salfordle_deploy
-    IdentitiesOnly yes
-EOF
-```
-
-### 3. Code (on the server)
-
-```sh
+ssh limefinder-server
 cd ~/domains/salfordle.co.uk
-git clone git@github-salfordle:jackmachin/salfordle.git app
+git clone https://github.com/jackmachin/salfordle.git app
 cd app
-php -v                              # must be 8.3+; if not, use Hostinger's full path, e.g. /opt/alt/php84/usr/bin/php
+php -v                              # 8.4 on this server; Laravel 13 needs 8.3+
 composer install --no-dev --optimize-autoloader --no-interaction
 cp .env.example .env
 php artisan key:generate
 ```
 
-### 4. Database
+### 2. Database
 
 Create a MySQL database and user in hPanel (**Databases → MySQL Databases**), then put them in `.env` (next step).
 
-### 5. `.env` on the server
+### 3. `.env` on the server
 
 Edit `~/domains/salfordle.co.uk/app/.env` and set:
 
@@ -74,7 +50,7 @@ STREETLE_REQUIRE_REVIEW=false       # true once answers are being reviewed
 STREETLE_IMAGE_DAILY_CAP=330
 ```
 
-### 6. Tables and street data
+### 4. Tables and street data
 
 ```sh
 php artisan migrate --force
@@ -82,7 +58,7 @@ php artisan db:seed --force         # loads the 3,645 streets from database/data
 chmod -R ug+rwX storage bootstrap/cache
 ```
 
-### 7. Point the domain at `public/`
+### 5. Point the domain at `public/`
 
 ```sh
 cd ~/domains/salfordle.co.uk
@@ -92,7 +68,7 @@ ln -s app/public public_html
 
 In hPanel, make sure SSL is active for the domain, and that the website's PHP version is 8.3+ (**Advanced → PHP Configuration**).
 
-### 8. First deploy of the frontend
+### 6. First deploy of the frontend
 
 Run the deploy script from your PC (below). It builds the frontend and uploads it.
 

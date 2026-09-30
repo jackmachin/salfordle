@@ -8,7 +8,7 @@
     ./deploy.ps1 -Seed     # also reload streets from database/data/streets.json
 #>
 param(
-    [string]$SshHost = 'salfordle',                               # alias from ~/.ssh/config
+    [string]$SshHost = 'limefinder-server',                       # alias from ~/.ssh/config (shared Hostinger account)
     [string]$RemotePath = 'domains/salfordle.co.uk/app',          # relative to the SSH user's home: works for ssh and scp
     [string]$Php = 'php',                                         # e.g. /opt/alt/php84/usr/bin/php if the default CLI is too old
     [switch]$Seed
