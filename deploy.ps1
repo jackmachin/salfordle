@@ -42,6 +42,8 @@ Write-Host '==> Uploading frontend build' -ForegroundColor Cyan
 Invoke-Remote 'rm -rf public/build.new'
 scp -r public/build "${SshHost}:$RemotePath/public/build.new"
 if ($LASTEXITCODE -ne 0) { throw 'Upload failed' }
+# scp from Windows can leave the folders readable only by us; the web server reads static files as another user.
+Invoke-Remote 'chmod -R a+rX public/build.new'
 # Swap in one step, so visitors never get a half-uploaded build.
 Invoke-Remote 'rm -rf public/build.old && (mv public/build public/build.old 2>/dev/null || true) && mv public/build.new public/build && rm -rf public/build.old'
 
